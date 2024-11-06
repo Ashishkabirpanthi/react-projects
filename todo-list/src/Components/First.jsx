@@ -1,7 +1,8 @@
-import React from 'react'
+import { useContext } from "react"
+import {Taskcontext} from "../context/TaskContext"
 
-const First = (props) => {
-    const {tasks} = props;
+const First = () => {
+    const [tasks] = useContext(Taskcontext);
     return <div className='w-full h-2/5 border border-blue-100 rounded-md flex items-center justify-evenly'>
         <div>
             <p className='text-red-300 text-3xl'>Lets Todo</p>

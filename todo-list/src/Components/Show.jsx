@@ -1,8 +1,10 @@
+import { useContext } from "react"
 import React from 'react'
-import { RiDeleteBin6Line } from "@remixicon/react"
+import { RiDeleteBin6Line} from "@remixicon/react"
+import {Taskcontext} from "../context/TaskContext"
 
-const Show = (props) => {
-    const { tasks, settask } = props;
+const Show = () => {
+    const [tasks,settask] = useContext(Taskcontext);
     const deletetask = (index) => {
         let copytask = [...tasks];
         copytask.splice(index, 1);

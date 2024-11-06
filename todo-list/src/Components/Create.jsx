@@ -1,9 +1,11 @@
-import React from 'react'
-import { useState } from 'react';
+import { useContext } from "react"
+import {useState } from 'react';
+import {Taskcontext} from "../context/TaskContext"
 
-const Create = (props) => {
+
+const Create = () => {
     const [tittle, settittle] = useState("");
-    const {tasks,settask} = props;
+    const [tasks,settask] = useContext(Taskcontext);
     const taskhandler = (e) => {
         e.preventDefault();
         let newtask = { text: tittle, completed: false };
