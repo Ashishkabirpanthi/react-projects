@@ -1,13 +1,17 @@
 import { useContext } from "react"
-import {useState } from 'react';
-import {Taskcontext} from "../context/TaskContext"
+import { useState } from 'react';
+import { Taskcontext } from "../context/TaskContext"
 
 
 const Create = () => {
     const [tittle, settittle] = useState("");
-    const [tasks,settask] = useContext(Taskcontext);
+    const [tasks, settask] = useContext(Taskcontext);
     const taskhandler = (e) => {
         e.preventDefault();
+        if (!tittle.trim()) {
+            alert("Task cannot be empty!");
+            return; // Stop further execution if the task is empty
+        }
         let newtask = { text: tittle, completed: false };
         let copytask = [...tasks]
         copytask.push(newtask);
