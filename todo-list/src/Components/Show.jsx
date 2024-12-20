@@ -22,7 +22,7 @@ const Show = () => {
   if (tasks.length > 0) {
     taskrender = tasks.map((task, i) => (
       <div key={i} className="w-full h-10 flex flex-col gap-2">
-        <div className="w-full h-9 border border-blue-100 rounded-md flex items-center justify-between">
+        <div className="w-full h-10 border border-blue-100 overflow-auto scrollbar-none rounded-md flex items-center justify-between">
           <div className="flex gap-2">
             <input
               value={task.completed ? "✔" : ""}

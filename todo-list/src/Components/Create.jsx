@@ -10,7 +10,7 @@ const Create = () => {
         e.preventDefault();
         if (!tittle.trim()) {
             alert("Task cannot be empty!");
-            return; // Stop further execution if the task is empty
+            return;
         }
         let newtask = { text: tittle, completed: false };
         let copytask = [...tasks]
