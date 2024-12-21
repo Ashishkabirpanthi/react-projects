@@ -2,7 +2,6 @@ class CustomError extends Error {
     constructor(message, statuscode) {
         super(message);
         this.status = statuscode;
-
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, message);
         }
