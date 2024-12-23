@@ -8,4 +8,4 @@ class CustomError extends Error {
     }
 };
 
-new CustomError("Error in connecting db", 500)
+new CustomError("Error in connecting db", 500);
