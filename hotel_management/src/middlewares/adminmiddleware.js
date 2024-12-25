@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const usermodel = require('./src/models/usermodel.js');
+const usermodel = require('../models/usermodel.js');
 exports.authenticateAdmin= async(req,res,next) =>{
     try {
         const token = req.cookies.token;

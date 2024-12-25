@@ -7,14 +7,19 @@ const PORT = process.env.PORT || 3000;
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-const { errorHandler } = require('./src/middlewares/errorHandler');
-const userRouter = require('./src/routes/userRouter.js');
+const { errorHandler } = require('../middlewares/errorHandler');
+const userRouter = require('../routes/userRouter.js');
+const propertyRouter = require('../routes/propertyRouter.js');
+const reviewRouter = require('../routes/reviewRouter.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("tiny"))
+
 app.use("/api", userRouter);
+app.use("/property", propertyRouter);
+app.use("/review", reviewRouter);
 
 app.use(cors({
     origin: true,
