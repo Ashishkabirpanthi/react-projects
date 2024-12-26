@@ -1,6 +1,7 @@
 const User = require('../models/usermodel.js');
 const jwt = require('jsonwebtoken');
-const { CustomError } = require('./src/utils/customError.js');
+const CustomError = require('../utils/customError.js');
+const { authenticateUser } = require("../middlewares/authMiddleware.js");
 
 exports.currentUser = (req, res) => {
     res.status(200).json({
@@ -11,17 +12,24 @@ exports.currentUser = (req, res) => {
 exports.signup = async (req, res, next) => {
     const { username, email, password } = req.body;
     try {
-
-        const existingUser = User.findOne({ email })
-        if (existingUser) return next(new CustomError('Email already exists', 400));
+        const existingUser = await User.findOne({ email })
+        if(existingUser) return next(new CustomError('Email already exists', 400));
 
         const user = await User.create({ username, email, password });
+
+        if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password must be at least 8 characters long and include one letter, one number, and one special character',
+            });
+        }
+
         await user.save();
 
-        const token = User.generateauthtoken();
+        const token = user.generateauthtoken();
 
         res.cookie('token', token, {
-            httpOnly: true,
+            // httpOnly: true,
             maxAge: 1000 * 60 * 60 * 5,
         });
 
@@ -31,33 +39,39 @@ exports.signup = async (req, res, next) => {
     }
 };
 
-exports.login = async (req, res, next) => {
+module.exports.login = async (req, res, next) => {
     const { email, password } = req.body;
-
     try {
-
-        const existingUser = User.findOne({ email })
-        if (!existingUser) return next(new CustomError('User Not found', 400));
-
-        const user = await AuthenticateUser(email, password)
-
-        const token = User.generateauthtoken();
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 5,
-        });
-
-        res.status(200).json({ success: true, Message: "User login successfully", token });
+      // kya user exist ?
+      const existingUser = await User.findOne({ email });
+      if (!existingUser) return next(new CustomError("User already exist", 400));
+  
+      const user = await User.authenticate(email, password);
+     
+  
+      const token = user.generateAuthToken();
+  
+      // cookie m set krnge
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 5,
+      });
+  
+      // res send krnege message token
+      res.status(201).json({
+        message: "Login successful",
+        token,
+      });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      next(new CustomError(error.message, 500));
     }
-};
+  };
+  
 
 exports.logout = async (req, res, next) => {
     try {
         res.clearCookie('token', {
-            httpOnly: true,
+            // httpOnly: true,
             secure: true,
         });
 

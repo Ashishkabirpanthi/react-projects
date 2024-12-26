@@ -1,5 +1,5 @@
 const express = require("express");
-const { authenticateUser } = require("../middlewares/authMiddleware");
+const { authenticateUser } = require("../middlewares/authMiddleware.js");
 const {
   currentUser,
   signup,
@@ -10,6 +10,8 @@ const {
 } = require("../controllers/userController");
 
 const router = express.Router();
+
+module.exports = router;
 
 router.get("/current-user", authenticateUser, currentUser);
 
